@@ -1,27 +1,54 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Using python and my hotmail account to send mobi, aw or pdf file to my kindle"""
+import poplib
 import smtplib
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+
+def get_personal_information():
+    with open('confidential.txt', 'r') as fp:
+        return eval(fp.read())
+
+
+PersonalInformation = get_personal_information()
 
 
 def email_content(file_path):
-    with open(file_path,'rb') as fp:
-        fp=get_file('path')
-        msg=MIMEText(fp.read())
-        personal_information=('lucius0720@hotmail.com','*****',
-        'lucius0720@kindle.cn')
-        msg['Subject']='The contents of my book'
-        msg['From']=personal_information[0]
-        msg['To']=personal_information[2]
+    msg = MIMEMultipart('related')
+    part = MIMEText('holyshit', 'plain')
+    msg['Subject'] = 'My_work'
+    msg['From'] = PersonalInformation['From']
+    msg['To'] = PersonalInformation['To']
+    with open(file_path, 'r') as fp:
+        attach = MIMEText(fp.read())
+        attach['Content-Type'] = 'applicaton/text'
+        attach['Content-Disposition'] = 'attachment;filename="%s"' % file_path
+        msg.attach(attach)
+    msg.attach(part)
+    return msg
 
 
-def send2kindle():
-    pass
-def main():
-    my_information=crucial_information('lucius0720@hotmail.com','*****',
-                                       'lucius0720@kindle.cn')
+def config_smtp(address):
+    address = 'smtp.' + address
+    smtp = smtplib.SMTP(address)
+    smtp.login(PersonalInformation['From'], PersonalInformation['Password'])
+    return smtp
+
+
+def send2kindle(file_path, address='163.com'):
+    smtp = config_smtp(address)
+    msg = email_content(file_path)
+    smtp.sendmail(PersonalInformation['From'], PersonalInformation['To'],
+                  msg.as_string())
+    smtp.quit()
 
 
 if __name__ == '__main__':
-    main()
+    from time import clock
+    start = clock()
+    # send2kindle('text.txt','live.com')
+    send2kindle('text.txt')
+    finish = clock()
+    print(finish - start)
