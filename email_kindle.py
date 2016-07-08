@@ -4,7 +4,9 @@
 import poplib
 import smtplib
 from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
+import os
 
 
 def get_personal_information():
@@ -17,14 +19,13 @@ PersonalInformation = get_personal_information()
 
 def email_content(file_path):
     msg = MIMEMultipart('related')
-    part = MIMEText('holyshit', 'plain')
+    part = MIMEText('holyshit')
     msg['Subject'] = 'My_work'
     msg['From'] = PersonalInformation['From']
     msg['To'] = PersonalInformation['To']
-    with open(file_path, 'r') as fp:
-        attach = MIMEText(fp.read())
-        attach['Content-Type'] = 'applicaton/text'
-        attach['Content-Disposition'] = 'attachment;filename="%s"' % file_path
+    with open(file_path, 'rb') as fp:
+        attach = MIMEApplication(fp.read())
+        attach['Content-Disposition'] = 'attachment;filename="%s"' % os.path.split(file_path)[-1]
         msg.attach(attach)
     msg.attach(part)
     return msg
