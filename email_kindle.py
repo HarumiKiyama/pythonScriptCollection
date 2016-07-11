@@ -69,4 +69,3 @@ class SendMobi2Kindle:
         Quit smtp
         """
         self.smtp.quit()
-
