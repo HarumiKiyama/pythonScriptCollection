@@ -6,13 +6,14 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
+from user_information import get_user_information
 import os
 
 
 class SendMobi2Kindle:
     def __init__(self):
         "init instance with person_information"
-        personal_information=self.get_personal_information()
+        personal_information=self.get_personal_information(user,kindle)
         assert 'From' in personal_information
         assert 'To' in personal_information
         assert 'Password' in personal_information
@@ -22,11 +23,15 @@ class SendMobi2Kindle:
         self.smtp = self.config_smtp()
 
     @staticmethod
-    def get_personal_information():
+    def get_personal_information(user):
         """return {"From":'xxx@xxx',"To":'xxx@xxx',"Password":"xxxxx"}
         """
-        with open('confidential.txt', 'r') as fp:
-            return eval(fp.read())
+        user_account=get_user_information(user)
+        # user_account={'From':'lucius0720@163.com',
+        #               'Password':'wlc123456'}
+        # kindle={'To':'lucius0720@kindle.cn'}
+        kindle.update(user_account)
+        return kindle
 
     def email_content(self, file_path):
         """add attach file and email content
