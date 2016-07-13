@@ -27,12 +27,14 @@ def parse():
     parser.add_argument('-c','--config',dest='Config',nargs=4,metavar=('User_name','User_email',
                                                          'User_password','User_kindle'),
                         help='Add a user')
-    args=parser.parse_args(['-l','dsd','-c','2131','dsdjksd','13213','13123'])
+    args=parser.parse_args()
     return vars(args)
 
 def filter_args(args):
     return {i:args[i] for i in args if args[i] is not None}
 def process_args(args):
+    root=os.path.expanduser('~')
+    os.chdir(root)
     if 'Config' in args:
         assert len(args)==1
         make_dot_directory()
@@ -42,7 +44,7 @@ def process_args(args):
         del_user_information(args['Remove_user'])
     elif 'List_user' in args:
         assert len(args)==1
-        list_users(users)
+        list_users(args['List_user'])
     elif 'Files' in args:
         assert 'Push_user' in args
         send2kindle(args['Push_user'],args['Files'])
