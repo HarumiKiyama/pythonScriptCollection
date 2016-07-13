@@ -6,7 +6,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
-from user_information import get_user_information
+from send2kindle.core.user_information import get_user_information
 import os
 
 

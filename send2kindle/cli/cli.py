@@ -3,8 +3,8 @@
 import argparse
 import os
 
-from email_kindle import send2kindle
-from user_information import *
+from send2kindle.core.email_kindle import send2kindle
+from send2kindle.core.user_information import *
 
 
 
