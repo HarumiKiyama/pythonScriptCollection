@@ -11,12 +11,12 @@ import os
 
 
 class SendMobi2Kindle:
-    def __init__(self,user):
+    def __init__(self, user):
         "init instance with person_information"
-        personal_information=self.get_personal_information(user)
-        assert 'From' in personal_information
-        assert 'To' in personal_information
-        assert 'Password' in personal_information
+        personal_information = self.get_personal_information(user)
+        assert 'From' in personal_information, 'No such user'
+        assert 'To' in personal_information, 'No such user'
+        assert 'Password' in personal_information, 'No such user'
         self.password = personal_information.get('Password')
         self.user_email = personal_information.get('From')
         self.kinle_email = personal_information.get('To')
@@ -35,9 +35,10 @@ class SendMobi2Kindle:
         """
         msg = MIMEMultipart('related')
         part = MIMEText('holyshit')
-        msg['Subject'] = 'My_work'
+        msg['Subject'] = 'File that I want to read'
         msg['From'] = self.user_email
         msg['To'] = self.kinle_email
+        assert os.access(file_path,os.F_OK),'No such file'
         with open(file_path, 'rb') as fp:
             attach = MIMEApplication(fp.read())
             attach[
@@ -52,7 +53,7 @@ class SendMobi2Kindle:
         :return : smtp
         """
         if '@hotmail' in self.user_email:
-            address='smtp.live.com'
+            address = 'smtp.live.com'
         else:
             address = 'smtp.' + self.user_email.split('@')[-1]
         smtp = smtplib.SMTP(address)
@@ -66,14 +67,23 @@ class SendMobi2Kindle:
         smtp = self.smtp
         msg = self.email_content(file_path)
         smtp.sendmail(self.user_email, self.kinle_email, msg.as_string())
+        single_file = os.path.split(file_path)[-1]
+        print('Successfully push %s to kindle' % single_file)
 
     def end_smtp_server(self):
         """
         Quit smtp
         """
         self.smtp.quit()
+        print('Thank you for using my service')
 
-def send2kindle(user,files):
-    client=SendMobi2Kindle(user)
-    map(client.send2kindle,files)
+
+def send2kindle(user, files):
+    client = SendMobi2Kindle(user)
+    if files == []:
+        print('There are no such file exist')
+    else:
+        for i in files:
+            client.send2kindle(i)
+        # map(client.send2kindle, files)
     client.end_smtp_server()

@@ -28,16 +28,22 @@ def get_user_information(user):
 
 
 def del_user_information(user):
-    os.remove('.kindle/%s' % user)
-    print("successfully remove %s's information" % user)
+    if os.access('.kindle/%s' % user, os.F_OK):
+        os.remove('.kindle/%s' % user)
+        print("successfully remove %s's information" % user)
+    else:
+        print('No such user')
 
 
 def list_users(user):
     if user == False:
         # show all user information
         files = tuple(os.walk('.kindle'))[0][-1]
-        for i in files:
-            print(i)
+        if len(files)==0:
+            print('There is no user')
+        else:
+            for i in files:
+                print(i)
     else:
         user_information = get_user_information(user)
         if user_information is None:
