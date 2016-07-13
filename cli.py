@@ -41,9 +41,18 @@ def process_args(args):
         assert len(args)==1
         del_user_information(args['Remove_user'])
     elif 'List_user' in args:
-        pass
+        assert len(args)==1
+        list_users(users)
     elif 'Files' in args:
-        pass
+        assert 'Push_user' in args
+        send2kindle(args['Push_user'],args['Files'])
 
 
-print(parse())
+
+def main():
+    args=parse()
+    args=filter_args(args)
+    process_args(args)
+
+if __name__ == '__main__':
+    main()

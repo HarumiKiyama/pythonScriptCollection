@@ -26,8 +26,9 @@ def list_users(users):
     if user==False:
         # show all user information
         files=os.walk('~/.kindle').next()[-1]
+        for i in files:
+            print(i)
     else:
         with open('~/.kindle/%s'%user) as fp:
-            pickle.load(fp)
-            
+            print(pickle.load(fp))
 

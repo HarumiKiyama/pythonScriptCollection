@@ -11,9 +11,9 @@ import os
 
 
 class SendMobi2Kindle:
-    def __init__(self):
+    def __init__(self,user):
         "init instance with person_information"
-        personal_information=self.get_personal_information(user,kindle)
+        personal_information=self.get_personal_information(user)
         assert 'From' in personal_information
         assert 'To' in personal_information
         assert 'Password' in personal_information
@@ -26,12 +26,7 @@ class SendMobi2Kindle:
     def get_personal_information(user):
         """return {"From":'xxx@xxx',"To":'xxx@xxx',"Password":"xxxxx"}
         """
-        user_account=get_user_information(user)
-        # user_account={'From':'lucius0720@163.com',
-        #               'Password':'wlc123456'}
-        # kindle={'To':'lucius0720@kindle.cn'}
-        kindle.update(user_account)
-        return kindle
+        return get_user_information(user)
 
     def email_content(self, file_path):
         """add attach file and email content
@@ -56,7 +51,10 @@ class SendMobi2Kindle:
         """
         :return : smtp
         """
-        address = 'smtp.' + self.user_email.split('@')[-1]
+        if '@hotmail' in self.user_email:
+            address='smtp.live.com'
+        else:
+            address = 'smtp.' + self.user_email.split('@')[-1]
         smtp = smtplib.SMTP(address)
         smtp.login(self.user_email, self.password)
         return smtp
@@ -74,3 +72,8 @@ class SendMobi2Kindle:
         Quit smtp
         """
         self.smtp.quit()
+
+def send2kindle(user,files):
+    client=SendMobi2Kindle(user)
+    map(client.send2kindle,files)
+    client.end_smtp_server()
