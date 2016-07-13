@@ -33,8 +33,6 @@ def parse():
 def filter_args(args):
     return {i:args[i] for i in args if args[i] is not None}
 def process_args(args):
-    root=os.path.expanduser('~')
-    os.chdir(root)
     if 'Config' in args:
         assert len(args)==1
         make_dot_directory()

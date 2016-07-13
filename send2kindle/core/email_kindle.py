@@ -38,6 +38,9 @@ class SendMobi2Kindle:
         msg['Subject'] = 'File that I want to read'
         msg['From'] = self.user_email
         msg['To'] = self.kinle_email
+        if file_path.startswith('~'):
+            file_path=os.path.expanduser(file_path)
+            assert file_path is not None, 'You should set your $HOME variable'
         assert os.access(file_path,os.F_OK),'No such file'
         with open(file_path, 'rb') as fp:
             attach = MIMEApplication(fp.read())
