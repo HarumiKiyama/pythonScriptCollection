@@ -1,4 +1,2 @@
-# A Tool for pushing file to kindle written by python
-## usage 
-Type python setup.py to install this package.
-To see how to use this tool, just type `send2kindle -h` in terminal
+# Python script collection 
+Just a bunch of Python scripts, if want to know how to use these scripts just go into their own directory and read  README.md file
