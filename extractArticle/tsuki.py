@@ -1,15 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import sys
-
 import time
-
-reload(sys)
-sys.setdefaultencoding('utf8')
-import re
 
 import requests
 from bs4 import BeautifulSoup
+import re
 
 HOME_HTML = 'https://isekailunatic.wordpress.com/tsuki-ga-michibiku-isekai-douchuu/'
 
@@ -35,7 +30,7 @@ def get_a_tag_list():
 def get_one_chapter(url):
     chapter_soup = get_soup(url)
     res = chapter_soup.find('h1', class_='entry-title').get_text() + '\n'
-    print res + 'completed'
+    print(res + 'completed')
     for p in chapter_soup.find('div', class_='entry-content').find_all('p'):
         if not p.find('a'):
             res += p.get_text() + '\n'
